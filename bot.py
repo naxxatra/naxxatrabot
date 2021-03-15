@@ -38,10 +38,18 @@ async def on_message(message):
     :return:
     """
     response = None
-    if message.content == COMMANDS['APOD']:
+
+    # Process command
+    if message.content == COMMANDS['COMMANDS']['command']:
+        # List all commands
+        response = '\n'.join(map(lambda cmd: f'{cmd["command"]}: {cmd["description"]}', COMMANDS.values()))
+    elif message.content == COMMANDS['APOD']['command']:
+        # Astronomy Picture of the Day
         print(f'Command: {message.content}, User: {message.author}')
         apod = bot_functions.Apod()
         response = apod.response()
+
+    # Frame the response and send it
     if response:
         if type(response) == list:
             # Multiple messages

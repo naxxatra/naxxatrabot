@@ -10,9 +10,11 @@ load_dotenv()
 
 
 class Apod:
-    NASA_API_KEY = os.getenv('NASA_API_KEY')
-    result = None
-    response_msg = None
+    def __init__(self, date=today()):
+        self.NASA_API_KEY = os.getenv('NASA_API_KEY')
+        self.result = None
+        self.response_msg = None
+        self.date = date
 
     def fetch(self):
         """
@@ -21,7 +23,7 @@ class Apod:
 
         :str: Message with image and its description
         """
-        cached_result = get_from_cache(TABLES["APOD"], 'date', today())
+        cached_result = get_from_cache(TABLES["APOD"], 'date', self.date)
 
         if cached_result:
             self.result = cached_result
