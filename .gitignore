@@ -2,3 +2,5 @@ db.json
 *.pyc
 *.env
 .idea
+__pycache__
+
