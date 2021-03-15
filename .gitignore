@@ -1,0 +1,4 @@
+db.json
+*.pyc
+*.env
+.idea
