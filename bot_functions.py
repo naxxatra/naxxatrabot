@@ -20,8 +20,6 @@ class Apod:
         """
         Fetch NASA's Astronomical Picture of the Day with the image/video
         and its description
-
-        :str: Message with image and its description
         """
         cached_result = get_from_cache(TABLES["APOD"], 'date', self.date)
 
@@ -39,6 +37,10 @@ class Apod:
             write_to_cache(TABLES['APOD'], self.result, 'date')
 
     def parse_result(self):
+        """
+        Convert the fetched result into discord message format
+        with text content and an embed
+        """
         if self.result:
             self.response_msg = {'content': self.result['explanation']}
             # Youtube URL
@@ -56,6 +58,10 @@ class Apod:
             self.response_msg['embed'] = embed
 
     def response(self):
+        """
+        Fetch, Parse and return the response message
+        :return: dict
+        """
         self.fetch()
         self.parse_result()
         return self.response_msg

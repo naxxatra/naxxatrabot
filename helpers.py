@@ -13,6 +13,7 @@ db = TinyDB('db.json')
 def today():
     """
     Today's date in the format 2021-03-15
+
     :return: str
     """
     return datetime.today().strftime("%Y-%m-%d")
@@ -56,10 +57,22 @@ def write_to_cache(table_name, document, upsert_key=None):
 
 
 def is_youtube_url(url):
+    """
+    Check if the URL is a YouTube URL
+
+    :param url: URL to be checked
+    :return: bool
+    """
     return "youtube" in url
 
 
 def yt_embed_to_playable(url):
+    """
+    Convert YouTube embed URL to YouTube view URL
+
+    :param url: YouTube embed URL
+    :return: str: YouTube view URL
+    """
     if "youtube" in url and "embed" in url:
         pattern = re.compile("embed/(.*)\?")
         result = pattern.search(url)
