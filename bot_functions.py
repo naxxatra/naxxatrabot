@@ -28,13 +28,16 @@ class Apod:
             print("apod(): Retrieved from cache")
         else:
             print("apod(): Cache not found. Freshly fetched")
-            r = requests.get("https://api.nasa.gov/planetary/apod", params={
-                'api_key': self.NASA_API_KEY,
-                'thumbs': True
-            })
-            r_json = r.json()
-            self.result = r_json
-            write_to_cache(TABLES['APOD'], self.result, 'date')
+            try:
+                r = requests.get("https://api.nasa.gov/planetary/apod", params={
+                    'api_key': self.NASA_API_KEY,
+                    'thumbs': True
+                })
+                r_json = r.json()
+                self.result = r_json
+                write_to_cache(TABLES['APOD'], self.result, 'date')
+            except Exception as e:
+                print("apod(): Exception: ", e)
 
     def parse_result(self):
         """

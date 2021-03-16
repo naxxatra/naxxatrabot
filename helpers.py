@@ -32,7 +32,7 @@ def get_from_cache(table_name, key, value):
         table = db.table(table_name)
         return table.get(where(key) == value)
     except Exception as e:
-        print('get_from_cache: Exception: ', e)
+        print('get_from_cache(): Exception: ', e)
         return None
 
 
@@ -53,7 +53,7 @@ def write_to_cache(table_name, document, upsert_key=None):
             table.insert(document)
         print(f'write_to_cache(): {table_name} saved to cache!')
     except Exception as e:
-        print('write_to_cache: Exception: ', e)
+        print('write_to_cache(): Exception: ', e)
 
 
 def is_youtube_url(url):
