@@ -10,6 +10,9 @@ load_dotenv()
 
 
 class Apod:
+    """
+    Bot functions for consuming the NASA API at https://apod.nasa.gov/
+    """
     def __init__(self, date=today()):
         self.NASA_API_KEY = os.getenv('NASA_API_KEY')
         self.result = None
@@ -36,6 +39,7 @@ class Apod:
                 r_json = r.json()
                 self.result = r_json
                 write_to_cache(TABLES['APOD'], self.result, 'date')
+                return self.result
             except Exception as e:
                 print("apod(): Exception: ", e)
 
@@ -59,6 +63,7 @@ class Apod:
             else:
                 embed.set_image(url=self.result['url'])
             self.response_msg['embed'] = embed
+            return self.response_msg
 
     def response(self):
         """

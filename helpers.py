@@ -10,13 +10,13 @@ db = TinyDB('db.json')
 # ................
 
 
-def today():
+def today(format="%Y-%m-%d"):
     """
-    Today's date in the format 2021-03-15
+    Today's date in the requested format
 
     :return: str
     """
-    return datetime.today().strftime("%Y-%m-%d")
+    return datetime.today().strftime(format)
 
 
 def get_from_cache(table_name, key, value):
@@ -79,3 +79,25 @@ def yt_embed_to_playable(url):
         if result:
             return f'https://youtube.com/watch?v={result.group(1)}'
     return url
+
+
+def parse_query(message, command):
+    """
+    Parse query from message
+    :param message: Full message with command and
+    :param command: Bot command
+    :return: str: The query param after the bot message
+    """
+    return ''.join(message.split(command)[1:]).strip()
+
+
+def is_date(date):
+    """
+    Check if the date is in the format mm/dd
+    :param date: Date to be tested for the pattern
+    :return: bool
+    """
+    pattern = re.compile('^\d\d/\d\d$')
+    if pattern.match(date):
+        return True
+    return False

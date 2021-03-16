@@ -2,6 +2,8 @@ import os
 import discord
 from dotenv import load_dotenv
 from constants import COMMANDS
+from helpers import parse_query
+
 import bot_functions
 
 # Set up environment variables
@@ -48,6 +50,12 @@ async def on_message(message):
         print(f'Command: {message.content}, User: {message.author}')
         apod = bot_functions.Apod()
         response = apod.response()
+    elif message.content.startswith(COMMANDS['TRIVIA']['command']):
+        # Trivia
+        print(f'Command: {message.content}, User: {message.author}')
+        query = parse_query(message.content, COMMANDS['TRIVIA']['command'])
+        numbers = bot_functions.Numbers(query)
+        response = numbers.response()
 
     # Frame the response and send it
     if response:
