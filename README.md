@@ -1,4 +1,4 @@
-# naxxatrabot
+# naxxatrabot (discord)
 
 Add new bot commands inside `bot_commands` as a new `Class` or `function` in a new file.
 
