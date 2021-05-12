@@ -8,15 +8,14 @@ import asyncio
 from discord_slash import SlashCommand
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_commands import create_option
+from dotenv import load_dotenv
 import typing
 import requests
 import datetime
 import json
 
 
-
-
-
+load_dotenv()
 
 def command_prefix(bot, message):
     if message.guild is None:
