@@ -28,9 +28,9 @@ def command_prefix(bot, message):
 async def get_prefix(ctx):
   return '' if ctx.guild is None else 'n!'
 
-bot = commands.Bot(command_prefix)
+bot = commands.Bot(command_prefix, case_insensitive=True)
 slash = SlashCommand(bot, sync_commands=True)
-
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():   
@@ -152,7 +152,7 @@ async def yt(ctx):
 	except:
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
-@slash.slash(name="youtube_together",description="Watch youtube together with everyone in a VC", guild_ids=[822020833601912832])
+@slash.slash(name="youtube_together",description="Watch youtube together with everyone in a VC")
 async def yt_t(ctx: SlashContext):
 	try:
 		channel = ctx.author.voice.channel
@@ -179,5 +179,34 @@ async def yt_t(ctx: SlashContext):
 	except:
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
+@bot.command()
+async def help(ctx):
+	embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
+
+	embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
+	embed.set_footer(text="<>-Optional, []-Required")
+
+	embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
+	embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
+	embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
+	embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
+	embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
+
+	await ctx.send(embed=embed)
+
+@slash.slash(name="help",description="Get all the commands you can use with this bot")
+async def _help(ctx:SlashContext):
+	embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
+
+	embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
+	embed.set_footer(text="<>-Optional, []-Required")
+
+	embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
+	embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
+	embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
+	embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
+	embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
+
+	await ctx.send(embed=embed)
 
 bot.run(os.getenv('DISCORD_TOKEN'))
