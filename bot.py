@@ -7,12 +7,14 @@ import os
 import asyncio
 from discord_slash import SlashCommand
 from discord_slash import cog_ext, SlashContext
-from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_commands import create_option,create_choice
+from dotenv import load_dotenv
 import typing
 import requests
 import datetime
 import json
 import wolframalpha
+load_dotenv()
 client = wolframalpha.Client(os.getenv('WOLFRAM_ID'))
 
 
@@ -180,33 +182,65 @@ async def yt_t(ctx: SlashContext):
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
 @bot.command()
-async def help(ctx):
-	embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
+async def help(ctx,*,params):
+	if params=="youtube" or params=="yt":
+		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0xff0000), description="***Youtube Together***")
 
-	embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
-	embed.set_footer(text="<>-Optional, []-Required")
+		embed.set_image(url="https://i.imgur.com/J5EETHu.png")
+		embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
 
-	embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
-	embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
-	embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
-	embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
-	embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
+		embed.add_field(name="How to create a new watch party/youtube together:", value="\\> Join a VC (voice chat)\n\\> Run the command( `n!youtube` or  `n!yt` or you can also use the slash command `/youtube`)\n\\> Click on the blue hyperlink that the bot sent\nYou have successfully created the watch party/Youtube together",inline=False)
+		embed.add_field(name="How To Use YouTube Together in a VC:", value="\\>  For the first time it will ask for authorization. You should authorize it. \n\\> After that it will take a few minutes to load.\n\\> You can then search for a YouTube video or paste the link.",inline=False)
+		embed.add_field(name="How To Join an existing Watch Party/ Youtube Together:", value="\\> If someone has started the watch party in a VC then you can just hover your mouse over that channel & you will see a button to join activity.\n**OR**\n\\> You could just click on the previous hyperlink that the bot sent initially.",inline=False)
+		await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
 
-	await ctx.send(embed=embed)
+		embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
+		embed.set_footer(text="<>-Optional, []-Required")
 
-@slash.slash(name="help",description="Get all the commands you can use with this bot")
-async def _help(ctx:SlashContext):
-	embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
+		embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
+		embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
+		embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
+		embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
+		embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
 
-	embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
-	embed.set_footer(text="<>-Optional, []-Required")
+		await ctx.send(embed=embed)
+	
 
-	embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
-	embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
-	embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
-	embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
-	embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
+@slash.slash(name="help",description="Get all the commands you can use with this bot",
+			    options=[
+               create_option(
+                 name="command",
+                 description="Get help regarding specific command",
+                 option_type=3,
+                 required=False,
+				 choices=[create_choice(
+					 name="Youtube",
+					 value="youtube"
+				 )]
+               )
+             ])
+async def _help(ctx:SlashContext,command):
+	if command=="youtube":
+		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0xff0000), description="***Youtube Together***")
 
-	await ctx.send(embed=embed)
+		embed.set_image(url="https://i.imgur.com/J5EETHu.png")
+		embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
+
+		embed.add_field(name="How to create a new watch party/youtube together:", value="\\> Join a VC (voice chat)\n\\> Run the command( `n!youtube` or  `n!yt` or you can also use the slash command `/youtube`)\n\\> Click on the blue hyperlink that the bot sent\nYou have successfully created the watch party/Youtube together",inline=False)
+		embed.add_field(name="How To Use YouTube Together in a VC:", value="\\>  For the first time it will ask for authorization. You should authorize it. \n\\> After that it will take a few minutes to load.\n\\> You can then search for a YouTube video or paste the link.",inline=False)
+		embed.add_field(name="How To Join an existing Watch Party/ Youtube Together:", value="\\> If someone has started the watch party in a VC then you can just hover your mouse over that channel & you will see a button to join activity.\n**OR**\n\\> You could just click on the previous hyperlink that the bot sent initially.",inline=False)
+		await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0x2900ff), url="https://naxxatra.com/")
+		embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.webp")
+		embed.set_footer(text="<>-Optional, []-Required")
+		embed.add_field(name="`n!apod`", value="This command gives you the NASA's APOD (Astronomy Picture Of The Day)",inline=False)
+		embed.add_field(name="`n!trivia <number>`", value="This command gives you a trivia fact about the number entered or a random number if no number is given",inline=False)
+		embed.add_field(name="`n!search [question]`", value="Get answers to almost everything. Powered by Wolfram Alpha API",inline=False)
+		embed.add_field(name="`n!youtube`", value="Watch youtube together with everyone in a VC",inline=False)
+		embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
+		await ctx.send(embed=embed)
 
 bot.run(os.getenv('DISCORD_TOKEN'))
