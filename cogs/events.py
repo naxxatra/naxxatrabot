@@ -16,6 +16,7 @@ class events(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_guild_permissions(manage_guild=True)
     async def add_event(self,ctx,title,*,description):
         user_list=[]
         embed=discord.Embed(title=title,description=description,colour=discord.Colour(0xF6B35F))
@@ -32,55 +33,80 @@ class events(commands.Cog):
         f.write(json.dumps(user_list))
         f.close()
 
-
-
-    @commands.Cog.listener()
-    async def on_reaction_add(self,reaction,user):
-        #print(reaction.channel.id)
-        if reaction.emoji == "✅" and user != self.bot.user:
-            f = open("./event.json", "r+")
-            user_dict= f.read()
-            user_dict=json.loads(user_dict)
-            f.close()
-            f=open("./event.json","w")
-            userlist=user_dict[f"{reaction.message.id}"]
-            userlist.append(user.id)
-            user_dict[f"{reaction.message.id}"]=userlist
-            f.write(json.dumps(user_dict))
-            f.close()
-            chnl=int(user_dict['channel'])
-            dis_channel = self.bot.get_channel(chnl)
-            msg = await dis_channel.fetch_message(reaction.message.id)
-            #embed=discord.Embed(title="title",description="description",colour=discord.Colour(0xF6B35F))
-            #output="Naxxatra"
-            #for i in user_dict[f"{reaction.message.id}"]:
-                #user = await self.bot.fetch_user(i)
-                #output=output+","+user.name
-
-            #embed.add_field(name="Attendees",value=output) 
-            z=msg.embeds[0].to_dict()           
-            z['fields'][0]['value'] += f", {user.name}"
-            y = discord.Embed.from_dict(z)
-            await msg.edit(embed=y)
-
     @commands.command()
-    async def get_msg(self,ctx,msg_id):
+    async def dm_event(self,ctx,msg_id,*,message):
         f = open("./event.json", "r+")
         user_dict= f.read()
         user_dict=json.loads(user_dict)
         f.close()
         chnl=int(user_dict['channel'])
-        dis_channel = self.bot.get_channel(chnl)        
+        dis_channel = self.bot.get_channel(chnl)
         msg = await dis_channel.fetch_message(msg_id)
-        embeds = msg.embeds
-        for embed in embeds:
-            await ctx.send(str(embed.to_dict()))
+        z=msg.embeds[0].to_dict()
+        
+        embed=discord.Embed(title=f"{z['title']}",description=message)
+        embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.png?size=4096")
+        for i in user_dict[str(msg_id)]:
+            user = await self.bot.fetch_user(i)
+            channel= await user.create_dm()
+            await channel.send(embed=embed)
 
-    @commands.command()
-    async def test(self,ctx):
-        z={'fields': [{'name': 'Attendees', 'value': 'Naxxatra,DiluteWater', 'inline': True}], 'color': 16167775, 'type': 'rich', 'description': 'description', 'title': 'title'}
-        y = discord.Embed.from_dict(z)
-        await ctx.send(embed=y)
+    @commands.Cog.listener()
+    async def on_reaction_add(self,reaction,user):
+        f = open("./event.json", "r+")
+        user_dict= f.read()
+        user_dict=json.loads(user_dict)
+        f.close()
+        #print(reaction.channel.id)
+        if str(reaction.message.id) in user_dict:
+            if reaction.emoji == "✅" and user != self.bot.user:
+                f=open("./event.json","w")
+                userlist=user_dict[f"{reaction.message.id}"]
+                userlist.append(user.id)
+                user_dict[f"{reaction.message.id}"]=userlist
+                f.write(json.dumps(user_dict))
+                f.close()
+                chnl=int(user_dict['channel'])
+                dis_channel = self.bot.get_channel(chnl)
+                msg = await dis_channel.fetch_message(reaction.message.id)
+                z=msg.embeds[0].to_dict()   
+                for i in user_dict[f"{reaction.message.id}"]:
+                    user = await self.bot.fetch_user(i)
+                    #output=output+","+user.mention
+                    z['fields'][0]['value'] += f", {user.mention}"
+                y = discord.Embed.from_dict(z)
+                await msg.edit(embed=y)
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self,reaction):
+        f = open("./event.json", "r+")
+        user_dict= f.read()
+        user_dict=json.loads(user_dict)
+        f.close()
+        user_id=reaction.user_id
+        user= await self.bot.fetch_user(user_id)
+        if str(reaction.message_id) in user_dict:
+                print("here")
+                f=open("./event.json","w")
+                userlist=user_dict[f"{reaction.message_id}"]
+                userlist.remove(user.id)
+                user_dict[f"{reaction.message_id}"]=userlist
+                f.write(json.dumps(user_dict))
+                f.close()
+                chnl=int(user_dict['channel'])
+                dis_channel = self.bot.get_channel(chnl)
+                msg = await dis_channel.fetch_message(reaction.message_id)
+                z=msg.embeds[0].to_dict()
+                #print(z)           
+                #print(user.id)
+                list_n_embed=z['fields'][0]['value']
+                list_n_embed=list_n_embed.replace(f", {user.mention}","")
+                #print(z['fields'][0]['value'].replace(user.mention,""))
+                z['fields'][0]['value']=list_n_embed
+
+                y = discord.Embed.from_dict(z)
+                await msg.edit(embed=y)
 
     @commands.command()
     async def add_image(self,ctx,msg_id,*,url=None):

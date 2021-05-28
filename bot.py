@@ -97,7 +97,6 @@ def get_wolfram(query):
 
 @bot.command()
 async def search(ctx,*,arg):
-
 	embed=discord.Embed(title=f"{arg}",description=f"{get_wolfram(arg)}",colour=discord.Colour(0xFF7F50))
 	embed.set_author(name="Wolfram Alpha",url="https://www.wolframalpha.com/",icon_url="https://i.imgur.com/uX2g1SL.png")
 	embed.set_footer(text=f"Requested by: {ctx.author}", icon_url=ctx.author.avatar_url)
