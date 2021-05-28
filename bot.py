@@ -243,4 +243,7 @@ async def _help(ctx:SlashContext,command):
 		embed.add_field(name="***SLASH COMMANDS***", value="All the above commands can also be used through Slash Commands. \nFor eg. You can use `/apod` for using n!apod command. \nSlash commands are easier to use.\n\n\n[Website](https://naxxatra.com/)\n[Github](https://github.com/naxxatra/naxxatrabot)",inline=False)
 		await ctx.send(embed=embed)
 
+print("Loading events cogs")
+bot.load_extension("cogs.events")
+
 bot.run(os.getenv('DISCORD_TOKEN'))
