@@ -184,7 +184,7 @@ async def yt_t(ctx: SlashContext):
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
 @bot.command()
-async def help(ctx,*,params):
+async def help(ctx,*,params=None):
 	if params=="youtube" or params=="yt":
 		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0xff0000), description="***Youtube Together***")
 
@@ -223,7 +223,7 @@ async def help(ctx,*,params):
 				 )]
                )
              ])
-async def _help(ctx:SlashContext,command):
+async def _help(ctx:SlashContext,command=None):
 	if command=="youtube":
 		embed = discord.Embed(title="Naxxatra Bot Help", colour=discord.Colour(0xff0000), description="***Youtube Together***")
 
