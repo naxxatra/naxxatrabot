@@ -347,7 +347,7 @@ class events(commands.Cog):
                 await ctx.send("Sorry, You don't have permission to do that.")
 
 
-    @cog_ext.cog_slash(name="set_channel",description="Select the channel you wish to select for event creation",guild_ids=[822020833601912832],
+    @cog_ext.cog_slash(name="set_channel",description="Select the channel you wish to select for event creation",
     options=[
         create_option(name="channel",
         description="Select the channel you wish to select for event creation",
