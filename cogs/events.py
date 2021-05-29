@@ -80,7 +80,7 @@ class events(commands.Cog):
                     user_list=[]
                     embed=discord.Embed(title=title,description=description,colour=discord.Colour(0xF6B35F))
                     embed.add_field(name="Attendees",value="Naxxatra")
-                    embed.set_footer(text="If you want to participate/attend this event the please react with ✅")
+                    embed.set_footer(text="If you want to participate/attend this event then please react with ✅")
                     embed.set_thumbnail(url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.png?size=4096")
                     msg= await dis_channel.send(embed=embed)
                     embed.set_author( name=f"Event ID: {msg.id}",icon_url="https://cdn.discordapp.com/icons/761896483838492682/756a7be666993d92c2421dd8af6d21ef.png?size=4096")
