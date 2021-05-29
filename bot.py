@@ -15,6 +15,7 @@ import datetime
 import json
 import wolframalpha
 load_dotenv()
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 client = wolframalpha.Client(os.getenv('WOLFRAM_ID'))
 
 
@@ -33,6 +34,7 @@ async def get_prefix(ctx):
 bot = commands.Bot(command_prefix, case_insensitive=True)
 slash = SlashCommand(bot, sync_commands=True)
 bot.remove_command('help')
+ddb = DiscordComponents(bot)
 
 @bot.event
 async def on_ready():   
@@ -143,10 +145,11 @@ async def yt(ctx):
 								}
 		headers={'content-type': 'application/json','Authorization': f"Bot {os.getenv('DISCORD_TOKEN')}"}
 		r=requests.post(url, data=json.dumps(params), headers=headers)
-		#embed=discord.Embed(title="Youtube Together", description="Click on the title to join",url=f"https://discord.com/invite/{r.json()['code']}")
-		embed = discord.Embed(title="Youtube Together",colour=discord.Colour(0xFF0000))
-		embed.description = f"[Click Here to Join Youtube Together in the VC](https://discord.com/invite/{r.json()['code']})"
-		await ctx.send(embed=embed)
+		link=f"https://discord.com/invite/{r.json()['code']}"
+		await ctx.send("Click the button join Youtube Together in VC",
+		components=[Button(style=ButtonStyle.URL,label="Youtube Together", url=link),
+		]
+		)
 	
 	except AttributeError:
 		await ctx.send("You Are not in a VC")

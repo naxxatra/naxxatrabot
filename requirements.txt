@@ -3,3 +3,4 @@ python-dotenv
 requests
 discord-py-slash-command
 wolframalpha
+discord-components
