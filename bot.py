@@ -183,6 +183,18 @@ async def yt_t(ctx: SlashContext):
 	except:
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
+#Poll Commands		
+@bot.command()
+async def create_poll(ctx, question, a, b): #This functoin will create a 2 option poll. True/False, Yes/No, Eat/Don't eat. That kind of polls.
+    await ctx.message.delete() #Deletes the command message as soon as bot registers it
+    body = "A) " + a + " \n" + "B) " + b #Creating a body for the embed
+    embed = discord.Embed(title= question, description= body, color = discord.Color.from_rgb(53, 217, 28) ) #Creating an embed for the message
+    msg = await ctx.send(embed = embed ) #Sending the message
+    await msg.add_reaction("\U0001f1e6") #Adding option A emoji
+    await msg.add_reaction("\U0001f1e7") #Adding option B emoji
+
+
+		
 @bot.command()
 async def help(ctx,*,params=None):
 	if params=="youtube" or params=="yt":
