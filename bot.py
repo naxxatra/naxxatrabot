@@ -187,7 +187,7 @@ async def yt_t(ctx: SlashContext):
 #Command for making polls
 @bot.command()
 async def make_poll(ctx, question, opt_a, opt_b, opt_c = "", opt_d = "", opt_e = "",opt_f = ""): #This can make polls upto 6 options long. Needs minimum of two options
-    #await ctx.message.delete()
+    await ctx.message.delete() #Deletes the command message from the channel as soon as the bot reads it
     options = [opt_a, opt_b, opt_c, opt_d, opt_e, opt_f] #Storing all the options as a list
     body = ""
 
