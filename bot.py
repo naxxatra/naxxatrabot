@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import typing
 import requests
 import datetime
+import random
 import json
 import wolframalpha
 load_dotenv()
@@ -183,6 +184,34 @@ async def yt_t(ctx: SlashContext):
 	except:
 		await ctx.send("There is some error in starting Youtube Togther or I don't have permission to create invite in that channel")
 
+#Command for making polls
+@bot.command()
+async def make_poll(ctx, question, opt_a, opt_b, opt_c = "", opt_d = "", opt_e = "",opt_f = ""): #This can make polls upto 6 options long. Needs minimum of two options
+    await ctx.message.delete() #Deletes the command message from the channel as soon as the bot reads it
+    options = [opt_a, opt_b, opt_c, opt_d, opt_e, opt_f] #Storing all the options as a list
+    body = ""
+
+    for i in range(len(options)):
+        if options[i] != "": #Checks if something was passed into the option before adding it to the body
+            body = body + chr(65 + i) + ") " + options[i] + "\n" #Adds the option to the embed body
+        else: #If one of the options is empty, all the following options are also empty. 
+            break #Breaking cuz there's no need to check further
+	
+    rgb = (random.randint(0,255), random.randint(0,255), random.randint(0,255)) #Randomly generates colour each time the poll is generated.
+    embd = discord.Embed(title = question,
+                         description= body,
+                         colour = discord.Color.from_rgb(rgb[0],rgb[1], rgb[2])) #making the embed
+    msg = await ctx.send(embed = embd) #Sending the message
+
+    option_emojis = ['\U0001f1e6',"\U0001f1e7","\U0001f1e8","\U0001f1e9","\U0001f1ea","\U0001f1eb"] #Emojis from :regional_indicator_a: to :regional_indicator_f:
+    for i in range(len(options)): 
+        if options[i] != "": #Checks if something is passed into the option before reacting with the emoji
+            await msg.add_reaction(option_emojis[i])
+        else: #if one option is empty, all the following ones are empty. Hence break.
+            break
+
+
+		
 @bot.command()
 async def help(ctx,*,params=None):
 	if params=="youtube" or params=="yt":
