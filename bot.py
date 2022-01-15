@@ -16,7 +16,7 @@ import random
 import json
 import wolframalpha
 load_dotenv()
-from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
+from discord_components import DiscordComponents, Button, ButtonStyle
 client = wolframalpha.Client(os.getenv('WOLFRAM_ID'))
 
 
@@ -166,7 +166,7 @@ async def yt_t(ctx: SlashContext):
 		params = {
 									'max_age': 86400,
 									'max_uses': 0,
-									'target_application_id': '755600276941176913', 
+									'target_application_id': '880218394199220334', 
 									'target_type': 2,
 									'temporary': False,
 									'validate': None
