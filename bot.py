@@ -228,6 +228,7 @@ async def make_poll(ctx, question, opt_a, opt_b, opt_c="", opt_d="", opt_e="",
 
 @bot.command(description="Get today's xkcd comic")
 async def xkcd_today(ctx):
+    await ctx.message.delete()  # Deletes the command message from the channel as soon as the bot reads it
     response = requests.get("https://xkcd.com/info.0.json")  # Fetching today's xkcd comic
     today = eval(response.text)  # converting it into a dictionary
     link = today["img"]  # Getting the link to today's image
@@ -245,6 +246,7 @@ async def xkcd_today(ctx):
 
 @bot.command(description="Get a Random xkcd comic")
 async def xkcd_random(ctx):
+    await ctx.message.delete()  # Deletes the command message from the channel as soon as the bot reads it
     response = requests.get("https://xkcd.com/info.0.json")  # Getting today's xkcd
     today = eval(response.text)  # Converting today's xkcd into a dictionary
     comic_num = random.randint(1, today["num"])  # Generating a random number between 1 and today's comic number
