@@ -209,8 +209,36 @@ async def make_poll(ctx, question, opt_a, opt_b, opt_c = "", opt_d = "", opt_e =
             await msg.add_reaction(option_emojis[i])
         else: #if one option is empty, all the following ones are empty. Hence break.
             break
+	
+@bot.command(description = "Get today's xkcd comic")
+async def xkcd_today(ctx):
+    response = requests.get("https://xkcd.com/info.0.json") #Fetching today's xkcd comic
+    today = eval(response.text) #converting it into a dictionary
+    link = today["img"] #Getting the link to today's image
+
+    colour = discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)) #Randomly generating a colour
+	
+    embed = discord.Embed(title = today["safe_title"], color = colour) #Making an embed, with the title being today's xkcd comic title.
+    embed.set_author(name = "XKCD", url = "https://xkcd.com") #Setting the author to be xkcd, and linking to the website
+    embed.set_image(url = link) #embedding the image into the embed
+
+    await ctx.send(embed = embed) #sending the embed 
 
 
+@bot.command(description = "Get a Random xkcd comic")
+async def xkcd_random(ctx):
+    response = requests.get("https://xkcd.com/info.0.json") #Getting today's xkcd
+    today = eval(response.text) #Converting today's xkcd into a dictionary
+    comic_num = random.randint(1,today["num"]) #Generating a random number between 1 and today's comic number
+    response = requests.get("https://xkcd.com/{num}/info.0.json".format(num = comic_num)) #Getting comic with the random number
+    comic = eval(response.text) #Converting the random comic response into a dictionary
+    link = comic["img"] #getting the link to the random comic
+    colour = discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)) #Randomly generating a colour
+    embed = discord.Embed(title = comic["safe_title"], description= "XKCD Number: {num}".format(num = comic_num), color = colour) #Making an embed
+    embed.set_author(name = "XKCD", url = "https://xkcd.com") #Setting the author
+    embed.set_image(url = link) #embedding the image
+
+    await ctx.send(embed = embed) #sending the image.
 		
 @bot.command()
 async def help(ctx,*,params=None):
