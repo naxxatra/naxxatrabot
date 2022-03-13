@@ -16,7 +16,7 @@ import random
 import json
 import wolframalpha
 load_dotenv()
-from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
+from discord_components import DiscordComponents, Button, ButtonStyle
 client = wolframalpha.Client(os.getenv('WOLFRAM_ID'))
 
 
@@ -166,7 +166,7 @@ async def yt_t(ctx: SlashContext):
 		params = {
 									'max_age': 86400,
 									'max_uses': 0,
-									'target_application_id': '755600276941176913', 
+									'target_application_id': '880218394199220334', 
 									'target_type': 2,
 									'temporary': False,
 									'validate': None
@@ -209,7 +209,6 @@ async def make_poll(ctx, question, opt_a, opt_b, opt_c = "", opt_d = "", opt_e =
             await msg.add_reaction(option_emojis[i])
         else: #if one option is empty, all the following ones are empty. Hence break.
             break
-
 	
 @bot.command(description = "Get today's xkcd comic")
 async def xkcd_today(ctx):
@@ -240,10 +239,6 @@ async def xkcd_random(ctx):
     embed.set_image(url = link) #embedding the image
 
     await ctx.send(embed = embed) #sending the image.
-
-
-	
-
 		
 @bot.command()
 async def help(ctx,*,params=None):
